@@ -49,22 +49,14 @@ public class player10 implements ContestSubmission
 		population = evolutionaryAlgorithm.initialisation(random);
 
 		int evaluationCount = 0;
-		int generationCount = 0;
-		double averageFitness = 0;
-		int newGenerationSizeCount = 0;
 
 		for (Individual child : population)
 		{
 			Double fitness = (Double) evaluation.evaluate(child.getGenotype());
 			evaluationCount++;
 			child.fitness = fitness;
-			averageFitness += fitness;
-			newGenerationSizeCount++;
 		}
 
-		System.out.println("#" + generationCount + ": " + String.format("%.0f", averageFitness / newGenerationSizeCount));
-
-		generationCount++;
 		while (evaluationCount < evaluationLimit) // TERMINATION CONDITION
 		{
 			// PARENT SELECTION
@@ -84,9 +76,6 @@ public class player10 implements ContestSubmission
 			}
 
 			// SURVIVOR SELECTION
-			averageFitness = 0;
-			newGenerationSizeCount = 0;
-
 			for (Individual child : children)
 			{
 				Double fitness = (Double) evaluation.evaluate(child.getGenotype());
@@ -95,8 +84,6 @@ public class player10 implements ContestSubmission
 				if (fitness != null)
 				{
 					child.fitness = fitness;
-					averageFitness += fitness;
-					newGenerationSizeCount++;
 				}
 				else
 				{
@@ -104,10 +91,7 @@ public class player10 implements ContestSubmission
 				}
 			}
 
-			System.out.println("#" + generationCount + ": " + String.format("%.0f", averageFitness / newGenerationSizeCount));
-
 			population = evolutionaryAlgorithm.survivorSelection(random, population, children);
-			generationCount++;
 		}
 	}
 }

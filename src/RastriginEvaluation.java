@@ -1,20 +1,20 @@
+
 import java.util.Properties;
 import org.vu.contest.ContestEvaluation;
 
-// This is an example evalation. It is based on the standard sphere function. It is a maximization problem with a maximum of 10 for 
-//  	vector x=0.
-// The sphere function itself is for minimization with minimum at 0, thus fitness is calculated as Fitness = 10 - 10*(f-fbest), 
-//  	where f is the result of the sphere function
+// This is an example evalation. It is based on the Rastrigin. It is a maximization problem with a maximum of 10 for 
+//  	vector a_.
+// The Rastrigin function itself is for minimization with minimum of 0.
 // Base performance is calculated as the distance of the expected fitness of a random search (with the same amount of available
-//	evaluations) on the sphere function to the function minimum, thus Base = E[f_best_random] - ftarget. Fitness is scaled
+//	evaluations) on the Rastrigin function to the function minimum, thus Base = E[f_best_random] - ftarget. Fitness is scaled
 //	according to this base, thus Fitness = 10 - 10*(f-fbest)/Base
-public class SphereEvaluation implements ContestEvaluation 
+public class RastriginEvaluation implements ContestEvaluation 
 {
 	// Evaluations budget
-	private final static int EVALS_LIMIT_ = 10000;
-	// The base performance. It is derived by doing random search on the sphere function (see function method) with the same
+	private final static int EVALS_LIMIT_ = 100000;
+	// The base performance. It is derived by doing  random search on the F&P function (see function method) with the same
 	//  amount of evaluations
-	private final static double BASE_ = 11.5356;
+	private final static double BASE_ = 36.6939274039372;
 	// The minimum of the sphere function
 	private final static double ftarget_=0;
 	
@@ -24,23 +24,27 @@ public class SphereEvaluation implements ContestEvaluation
 	private int evaluations_;
 	
 	// Properties of the evaluation
-	private String multimodal_ = "false";
+	private String multimodal_ = "true";
 	private String regular_ = "true";
-	private String separable_ = "true";
-	private String evals_ = Integer.toString(EVALS_LIMIT_);
+	private String separable_ = "false";
+	private String evals_ = Integer.toString(EVALS_LIMIT_);	
 
-	public SphereEvaluation()
+	private static double ALPHA_ = 10;
+
+	public RastriginEvaluation()
 	{
 		best_ = 0;
-		evaluations_ = 0;		
+		evaluations_ = 0;	
 	}
 
-	// The standard sphere function. It has one minimum at 0.
+	// The Rastrigin function. The global minumum is 0.
 	private double function(double[] x)
 	{	
+		int dim = 10;
+		
 		double sum = 0;
-		for(int i=0; i<10; i++) sum += x[i]*x[i];
-		return sum;
+		for(int i=0; i<dim; i++) sum += x[i]*x[i] - ALPHA_*Math.cos(2*Math.PI*x[i]);
+		return sum + ALPHA_*dim;	
 	}
 	
 	@Override
@@ -53,7 +57,7 @@ public class SphereEvaluation implements ContestEvaluation
 		
 		if(evaluations_>EVALS_LIMIT_) return null;
 		
-		// Transform function value (sphere is minimization).
+		// Transform function value (F&P is minimization).
 		// Normalize using the base performance
 		double f = 10 - 10*( (function(ind)-ftarget_) / BASE_ ) ;
 		if(f>best_) best_ = f;

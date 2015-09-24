@@ -2,7 +2,7 @@ package implementation;
 
 import java.util.Random;
 import model.EvolutionaryAlgorithm;
-import model.Individual;
+import model.Space;
 
 /** Choose an algorithm and population-size based on the given arguments */
 public class Bootstrap
@@ -12,11 +12,8 @@ public class Bootstrap
 		EvolutionaryAlgorithm selectedEA;
 
 		// TODO: select the best suiting evolutionary-algorithm based on the given arguments 
-		
-		
-		selectedEA = new EvolutionairyStrategies(100, 400, 1, 0.00001, 1 / Math.sqrt(Individual.NUM_VALUES), 2, 1);
+		selectedEA = new EvolutionaryStrategies(100, 400, 1, 0.00001, 1 / Math.sqrt(Space.DIMENSIONS), 2, 1);
 
-		
 		// return 
 		return selectedEA;
 	}

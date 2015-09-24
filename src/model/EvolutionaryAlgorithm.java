@@ -16,18 +16,6 @@ public interface EvolutionaryAlgorithm
 	List<Individual> initialisation(Random random);
 
 	/**
-	 * Select the parents that will create the future generation.<br />
-	 * Informally: <i>Who's gonna do who.</i>
-	 * 
-	 * @param random
-	 *            Use this object whenever a random number is needed. This ensures a consistent result
-	 * @param population
-	 *            All individuals / parent candidates
-	 * @return A list containing the mating-pools/parent-couples
-	 */
-	List<Individual[]> parentSelection(Random random, List<Individual> population);
-
-	/**
 	 * Select our parent for the future generation.
 	 * 
 	 * @param random
@@ -47,6 +35,18 @@ public interface EvolutionaryAlgorithm
 	 *            The individual that has to be mutated.
 	 */
 	void mutation(Random random, Individual individual);
+
+	/**
+	 * Select the parents that will create the future generation.<br />
+	 * Informally: <i>Who's gonna do who.</i>
+	 * 
+	 * @param random
+	 *            Use this object whenever a random number is needed. This ensures a consistent result
+	 * @param population
+	 *            All individuals / parent candidates
+	 * @return A list containing the mating-pools/parent-couples
+	 */
+	List<Individual[]> parentSelection(Random random, List<Individual> population);
 
 	/**
 	 * Survival of the fittest.
