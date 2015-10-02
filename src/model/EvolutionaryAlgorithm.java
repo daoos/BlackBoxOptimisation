@@ -16,7 +16,7 @@ public interface EvolutionaryAlgorithm
 	List<Individual> initialisation(Random random);
 
 	/**
-	 * Select our parent for the future generation.
+	 * Combine the parents and create offspring
 	 * 
 	 * @param random
 	 *            Use this object whenever a random number is needed. This ensures a consistent result
@@ -27,7 +27,7 @@ public interface EvolutionaryAlgorithm
 	Individual[] recombination(Random random, Individual[] matingPool);
 
 	/**
-	 * Genetic mutation might occur when an individual is exposed to chemicals or radiation ;)
+	 * Mutate an individual
 	 * 
 	 * @param random
 	 *            Use this object whenever a random number is needed. This ensures a consistent result
@@ -37,8 +37,7 @@ public interface EvolutionaryAlgorithm
 	void mutation(Random random, Individual individual);
 
 	/**
-	 * Select the parents that will create the future generation.<br />
-	 * Informally: <i>Who's gonna do who.</i>
+	 * Select the parents that will create the future generation.
 	 * 
 	 * @param random
 	 *            Use this object whenever a random number is needed. This ensures a consistent result
@@ -49,7 +48,7 @@ public interface EvolutionaryAlgorithm
 	List<Individual[]> parentSelection(Random random, List<Individual> population);
 
 	/**
-	 * Survival of the fittest.
+	 * Survival of the fittest. Decide which individuals are allowed to live
 	 * 
 	 * @param random
 	 *            Use this object whenever a random number is needed. This ensures a consistent result
