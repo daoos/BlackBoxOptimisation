@@ -18,7 +18,7 @@ public class Bootstrap
 			μ = 100;
 			λ = 400;
 			σ = 1;
-			ε0 = 0.00001;
+			ε0 = 0; // getest!
 			τ1 = 1.0 / Math.sqrt(2.0 * SolutionVectors.DIMENSIONS);
 			τ2 = 1.0 / Math.sqrt(2.0 * Math.sqrt(SolutionVectors.DIMENSIONS));
 			breedings = 1;
@@ -30,11 +30,11 @@ public class Bootstrap
 			μ = 100;
 			λ = 400;
 			σ = 1;
-			ε0 = 0.00001;
+			ε0 = 0; // getest!
 			τ1 = 1.0 / Math.sqrt(2.0 * SolutionVectors.DIMENSIONS);
 			τ2 = 1.0 / Math.sqrt(2.0 * Math.sqrt(SolutionVectors.DIMENSIONS));
 			breedings = 1;
-			transpose = 0.1;
+			transpose = 1; // getest!
 			selectedEA = new UnimodalSolver(μ, λ, σ, ε0, τ1, τ2, breedings, transpose);
 		}
 

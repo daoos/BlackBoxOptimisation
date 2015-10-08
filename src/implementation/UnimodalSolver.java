@@ -17,7 +17,7 @@ public class UnimodalSolver implements EvolutionaryAlgorithm
 	private double	τ2;
 	private int		breedings;
 	private double	transpose;
-	private int		matingPoolSize	= 1;	// Number of parents per family. 1 because the parent will be cloned
+	private int		matingPoolSize	= 2;	// Number of parents per family. 1 because the parent will be cloned
 
 	/**
 	 * @param μ
@@ -58,7 +58,8 @@ public class UnimodalSolver implements EvolutionaryAlgorithm
 	public Individual[] recombination(Random random, Individual[] matingPool)
 	{
 		// No recombination
-		return EAUtils.noRecombination(matingPool, breedings);
+		//return EAUtils.noRecombination(matingPool, breedings);
+		return EAUtils.wholeArithmeticRecombination(matingPool, breedings, 0.5);
 	}
 
 	public void mutation(Random random, Individual individual)
@@ -72,6 +73,7 @@ public class UnimodalSolver implements EvolutionaryAlgorithm
 		// Fitness Proportional Selection
 		int numMatingPools = λ / breedings;
 		return EAUtils.fitnessProportionalSelection(random, population, numMatingPools, matingPoolSize, transpose);
+		//return EAUtils.uniformParentSelection(random, population, numMatingPools, matingPoolSize);
 	}
 
 	public List<Individual> survivorSelection(Random random, List<Individual> oldGeneration, List<Individual> newGeneration)
