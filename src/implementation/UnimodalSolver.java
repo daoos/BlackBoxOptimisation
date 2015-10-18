@@ -6,18 +6,27 @@ import model.EAUtils;
 import model.EvolutionaryAlgorithm;
 import model.Individual;
 
-/** Our solution for an unimodal function problem */
+/**
+ * Our solution for an unimodal function problem
+ * 
+ * Initialization:		Uniform random
+ * Recombination:		Intermediate / whole arithmetic
+ * Mutation:			Self adaptive mutation with one step size
+ * Parent selection:	Uniform random
+ * Survivor selection:	(μ, λ) Selection
+ * 
+ * Parameters are set in 'Bootstrap.java'
+ */
 public class UnimodalSolver implements EvolutionaryAlgorithm
 {
 	private int		μ;
 	private int		λ;
 	private double	σ;
 	private double	ε0;
-	private double	τ1;
-	private double	τ2;
+	private double	τ;
+	private double	α;
 	private int		breedings;
-	private double	transpose;
-	private int		matingPoolSize	= 2;	// Number of parents per family. 1 because the parent will be cloned
+	private int		matingPoolSize	= 2;	// Number of parents per family. 2 because of WholeArithmeticRecombination
 
 	/**
 	 * @param μ
@@ -28,57 +37,47 @@ public class UnimodalSolver implements EvolutionaryAlgorithm
 	 *            Initial mutation step size
 	 * @param ε0
 	 *            Lower bound of σ
-	 * @param τ1
-	 *            Learning rate: τ' ∝ 1/√2n. Where n = problem_size/number_of_variables
-	 * @param τ2
-	 *            Learning rate: τ ∝ 1/√2√n.
+	 * @param τ
+	 *            Learning rate. Usually: τ ∝ 1/√n. Where n = problem_size/number_of_variables
 	 * @param breedings
 	 *            Amount of offspring per mating pool
-	 * @param transpose
-	 *            Fitness Proportional Selection parameter
+	 * @param α
+	 *            Whole Arithmetic Recombination parameter
 	 */
-	public UnimodalSolver(int μ, int λ, double σ, double ε0, double τ1, double τ2, int breedings, double transpose)
+	public UnimodalSolver(int μ, int λ, double σ, double ε0, double τ, int breedings, double α)
 	{
 		this.μ = μ;
 		this.λ = λ;
 		this.σ = σ;
 		this.ε0 = ε0;
-		this.τ1 = τ1;
-		this.τ2 = τ2;
+		this.τ = τ;
 		this.breedings = breedings;
-		this.transpose = transpose;
+		this.α = α;
 	}
 
 	public List<Individual> initialisation(Random random)
 	{
-		// Uniform random
 		return EAUtils.initialisationUniformRandom(random, μ, σ);
 	}
 
 	public Individual[] recombination(Random random, Individual[] matingPool)
 	{
-		// No recombination
-		//return EAUtils.noRecombination(matingPool, breedings);
-		return EAUtils.wholeArithmeticRecombination(matingPool, breedings, 0.5);
+		return EAUtils.wholeArithmeticRecombination(matingPool, breedings, α);
 	}
 
 	public void mutation(Random random, Individual individual)
 	{
-		// Uncorrelated Mutation with n Step Sizes
-		EAUtils.uncorrelatedMutationWithNStepSizes(random, individual, τ1, τ2, ε0);
+		EAUtils.uncorrelatedMutationWithOneStepSize(random, individual, τ, ε0);
 	}
 
 	public List<Individual[]> parentSelection(Random random, List<Individual> population)
 	{
-		// Fitness Proportional Selection
 		int numMatingPools = λ / breedings;
-		return EAUtils.fitnessProportionalSelection(random, population, numMatingPools, matingPoolSize, transpose);
-		//return EAUtils.uniformParentSelection(random, population, numMatingPools, matingPoolSize);
+		return EAUtils.uniformParentSelection(random, population, numMatingPools, matingPoolSize);
 	}
 
 	public List<Individual> survivorSelection(Random random, List<Individual> oldGeneration, List<Individual> newGeneration)
 	{
-		// (μ, λ) Selection
 		return EAUtils.μλSelection(oldGeneration, newGeneration, μ, λ);
 	}
 }

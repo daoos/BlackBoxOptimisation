@@ -10,8 +10,10 @@ import java.util.Random;
 public class EAUtils
 {
 	/**
+	 * Fitness Proportional Selection (FPS)
+	 * 
 	 * @param random
-	 *            A random object to draw random numbers
+	 *            The random object used for all randomness within this function
 	 * @param population
 	 *            A List containing the whole population
 	 * @param numMatingPools
@@ -28,7 +30,6 @@ public class EAUtils
 		double sum = 0;
 		double[] fitnisses = new double[population.size()];
 
-		
 		// save fitness and find minimum 
 		for (int i = 0; i < population.size(); i++)
 		{
@@ -80,10 +81,10 @@ public class EAUtils
 	}
 
 	/**
-	 * Generates and returns a population with randomly initialized individuals
+	 * Generates and returns a new population with uniform-randomly initialized individuals
 	 * 
 	 * @param random
-	 *            A random object to draw random numbers
+	 *            The random object used for all randomness within this function
 	 * @param μ
 	 *            Population size
 	 * @param σ
@@ -115,20 +116,19 @@ public class EAUtils
 	}
 
 	/**
-	 * No recombination. The parent is being cloned. Used in Evolutionary Programming (EP).
+	 * No recombination. Clone the parent. Used in Evolutionary Programming (EP).
 	 * 
 	 * @param matingPool
-	 *            The mating pool with one parent
+	 *            The mating pool with only one parent
 	 * @param breedings
 	 *            Number of desired clones
-	 * @return An array with one clone of the parent
+	 * @return An array containing clones of the parent
 	 */
 	public static Individual[] noRecombination(Individual[] matingPool, int breedings)
 	{
 		if (matingPool.length != 1)
 			throw new RuntimeException("Invalid number of parents!");
 
-		// create clones
 		Individual original = matingPool[0];
 		Individual[] clones = new Individual[breedings];
 
@@ -148,16 +148,16 @@ public class EAUtils
 	}
 
 	/**
-	 * Self adaptive mutation <br>
+	 * Self adaptive mutation with n step sizes
 	 * 
 	 * @param random
-	 *            A random object to draw random numbers
+	 *            The random object used for all randomness within this function
 	 * @param individual
 	 *            The individual that is to be mutated
 	 * @param τ1
-	 *            Learning rate: τ' ∝ 1/√2n. Where n = problem_size/number_of_variables
+	 *            Learning rate: τ' ∝ 1/√(2n). Where n = problem_size/number_of_variables
 	 * @param τ2
-	 *            Learning rate: τ ∝ 1/√2√n. Where n = problem_size/number_of_variables
+	 *            Learning rate: τ ∝ 1/√(2√n). Where n = problem_size/number_of_variables
 	 * @param ε0
 	 *            Lower bound of σ
 	 * @return The newly created babies
@@ -181,10 +181,10 @@ public class EAUtils
 	}
 
 	/**
-	 * Self adaptive mutation <br>
+	 * Self adaptive mutation with one step size <br>
 	 * 
 	 * @param random
-	 *            A random object to draw random numbers
+	 *            The random object used for all randomness within this function
 	 * @param individual
 	 *            The individual that is to be mutated
 	 * @param τ
@@ -210,8 +210,10 @@ public class EAUtils
 	}
 
 	/**
+	 * Uniform parent selection
+	 * 
 	 * @param random
-	 *            A random object to draw random numbers
+	 *            The random object used for all randomness within this function
 	 * @param population
 	 *            A List containing the whole population
 	 * @param numMatingPools
@@ -244,7 +246,8 @@ public class EAUtils
 	}
 
 	/**
-	 * Whole Arithmetic Recombination<br>
+	 * Whole Arithmetic Recombination
+	 * 
 	 * Takes 2 parents and creates a bunch of babies
 	 * 
 	 * @param matingPool
@@ -316,5 +319,37 @@ public class EAUtils
 
 		// our new population =)
 		return population;
+	}
+
+	/**
+	 * Global Arithmetic Recombination
+	 * Takes n parents and create one baby
+	 * 
+	 * @param matingPool
+	 *            An array containing 2 parents
+	 * @return The newly created baby
+	 */
+	public static Individual[] globalArithmeticRecombination(Individual[] matingPool)
+	{
+		if (matingPool.length != SolutionVectors.DIMENSIONS)
+			throw new RuntimeException("Invalid number of parents!");
+
+		Individual baby = new Individual();
+
+		for (int i = 0; i < SolutionVectors.DIMENSIONS; i++)
+		{
+			baby.x[i] = matingPool[i].x[i];
+			baby.σs[i] = matingPool[i].σs[i];
+		}
+
+		double σSum = 0;
+		for (int i = 0; i < SolutionVectors.DIMENSIONS; i++)
+		{
+			σSum += matingPool[i].σ;
+		}
+
+		baby.σ = 1 / (SolutionVectors.DIMENSIONS) * σSum;
+
+		return new Individual[] { baby };
 	}
 }

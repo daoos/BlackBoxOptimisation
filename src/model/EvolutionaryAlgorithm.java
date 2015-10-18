@@ -43,7 +43,7 @@ public interface EvolutionaryAlgorithm
 	 *            Use this object whenever a random number is needed. This ensures a consistent result
 	 * @param population
 	 *            All individuals / parent candidates
-	 * @return A list containing the mating-pools/parent-couples
+	 * @return A list containing the mating-pools/couples
 	 */
 	List<Individual[]> parentSelection(Random random, List<Individual> population);
 
@@ -53,10 +53,10 @@ public interface EvolutionaryAlgorithm
 	 * @param random
 	 *            Use this object whenever a random number is needed. This ensures a consistent result
 	 * @param oldGeneration
-	 *            All parents / previous population
+	 *            A list containing the old generation / the previous population
 	 * @param newGeneration
-	 *            All children
-	 * @return The new population
+	 *            A list containing the new generation / all children
+	 * @return Choose and return the new population
 	 */
 	List<Individual> survivorSelection(Random random, List<Individual> oldGeneration, List<Individual> newGeneration);
 }

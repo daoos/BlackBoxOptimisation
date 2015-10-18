@@ -15,7 +15,7 @@ public class player10 implements ContestSubmission
 	private Random				random;
 	private ContestEvaluation	evaluation;
 	private int					evaluationLimit;
-	private boolean				isMultimodal, hasStructure, isSeparable;
+	private boolean				isMultimodal, isRegular, isSeparable;
 
 	private List<Individual>		population;
 	private EvolutionaryAlgorithm	evolutionaryAlgorithm;
@@ -38,14 +38,15 @@ public class player10 implements ContestSubmission
 		Properties props = evaluation.getProperties();
 		evaluationLimit = Integer.parseInt(props.getProperty("Evaluations"));
 		isMultimodal = Boolean.parseBoolean(props.getProperty("Multimodal"));
-		hasStructure = Boolean.parseBoolean(props.getProperty("Regular"));
+		isRegular = Boolean.parseBoolean(props.getProperty("Regular"));
 		isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
 	}
 
+	/** Decides on the order of execution of every Evolutionary Algorithm (EA) */
 	public synchronized void run()
 	{
 		// INITIALISATION
-		evolutionaryAlgorithm = Bootstrap.chooseEvolutionaryAlgorithm(random, isMultimodal, hasStructure, isSeparable, evaluationLimit);
+		evolutionaryAlgorithm = Bootstrap.getEvolutionaryAlgorithm(random, isMultimodal, isRegular, isSeparable, evaluationLimit);
 		population = evolutionaryAlgorithm.initialisation(random);
 
 		int evaluationCount = 0;
