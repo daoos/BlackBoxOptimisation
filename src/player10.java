@@ -42,15 +42,15 @@ public class player10 implements ContestSubmission
 		isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
 	}
 
-	/** Decides on the order of execution of every Evolutionary Algorithm (EA) */
+	/** Scheme for all Evolutionary Algorithms */
 	public synchronized void run()
 	{
 		// INITIALISATION
 		evolutionaryAlgorithm = Bootstrap.getEvolutionaryAlgorithm(random, isMultimodal, isRegular, isSeparable, evaluationLimit);
 		population = evolutionaryAlgorithm.initialisation(random);
-
+		
+		// EVALUATION
 		int evaluationCount = 0;
-
 		for (Individual child : population)
 		{
 			Double fitness = (Double) evaluation.evaluate(child.getGenotype());
@@ -63,7 +63,7 @@ public class player10 implements ContestSubmission
 			// PARENT SELECTION
 			List<Individual[]> coupleList = evolutionaryAlgorithm.parentSelection(random, population);
 
-			// RECOMBANATION
+			// RECOMBINATION
 			List<Individual> children = new ArrayList<Individual>();
 			for (Individual[] parents : coupleList)
 			{
@@ -76,7 +76,7 @@ public class player10 implements ContestSubmission
 				evolutionaryAlgorithm.mutation(random, child);
 			}
 
-			// SURVIVOR SELECTION
+			// EVALUATION
 			for (Individual child : children)
 			{
 				Double fitness = (Double) evaluation.evaluate(child.getGenotype());
@@ -91,7 +91,8 @@ public class player10 implements ContestSubmission
 					break;
 				}
 			}
-
+			
+			// SURVIVOR SELECTION
 			population = evolutionaryAlgorithm.survivorSelection(random, population, children);
 		}
 	}
